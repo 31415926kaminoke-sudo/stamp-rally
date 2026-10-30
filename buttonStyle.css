@@ -1,0 +1,48 @@
+/* style.css */
+
+.buttonStyle {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  background-color: #4f46e5;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+/* ホバー時 */
+.buttonStyle:hover {
+  background-color: #4338ca;
+}
+
+/* クリック時 */
+.buttonStyle:active {
+  transform: scale(0.98);
+}
+
+/* buttonStyle.css の一番下に追加 */
+
+/* 1個だけ背景色を赤にする（通常時） */
+.btn-red {
+  background-color: #ef4444;
+  /* Tailwindの bg-red-500 相当の色 */
+  box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+  /* 影も赤っぽく */
+}
+
+/* ホバーしたときの色も赤系で上書き */
+.btn-red:hover {
+  background-color: #dc2626;
+  /* hover:bg-red-600 相当 */
+}
