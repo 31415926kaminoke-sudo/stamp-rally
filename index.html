@@ -7,6 +7,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- 💡 ここでCSSファイルを読み込みます -->
+  <link rel="stylesheet" href="buttonStyle.css">
+
   <title>富樫デジタルスタンプラリー</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -102,31 +105,6 @@
       padding: 20px;
       background: white;
       border-radius: 12px;
-    }
-
-
-    /* =========================
-       ボタン
-       ========================= */
-
-    button {
-      padding: 12px 16px;
-      margin: 6px;
-      border: none;
-      border-radius: 8px;
-      background: #3498db;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #217dbb;
-    }
-
-    button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
     }
 
 
@@ -318,26 +296,21 @@
         <br>
 
 
-        <button id="homeScanButton"
-          class="w-full my-4 py-4 px-6 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold rounded-2xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 text-sm">
+        <button id="homeScanButton" class="buttonStyle">
           📷 二次元バーコードを読み取る
         </button>
 
-
-        <button id="homeMapButton"
-          class="w-full my-4 py-4 px-6 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold rounded-2xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 text-sm">
+        <button id="homeMapButton" class="buttonStyle">
           🗺️ 地図を見る
         </button>
 
-        <button id="homePointButton"
-          class="w-full my-4 py-4 px-6 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold rounded-2xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 text-sm">
-          ⭐ ポイントを確認する
+
+        <button id="homeRewardsButton" class="buttonStyle">
+          🎁 景品と交換する
         </button>
 
-
-        <button id="homeRewardsButton"
-          class="w-full my-4 py-4 px-6 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white font-bold rounded-2xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 text-sm">
-          🎁 景品と交換する
+        <button id="resetButton" class="buttonStyle btn-red">
+          🔄 データをリセット
         </button>
 
       </div>
@@ -363,34 +336,17 @@
           二次元バーコードを映してください。
         </p>
 
-
-        <!-- カメラ切り替え -->
-
-        <div>
-
-          <button id="backCameraBtn">
-            外カメラ
-          </button>
-
-
-          <button id="frontCameraBtn">
-            内カメラ
-          </button>
-
-        </div>
-
-
         <!-- カメラ映像 -->
 
         <div id="reader"></div>
 
 
-        <button id="startBtn">
+        <button id="startBtn" class="buttonStyle">
           カメラを起動
         </button>
 
 
-        <button id="stopBtn" disabled>
+        <button id="stopBtn" class="buttonStyle" disabled>
           カメラを停止
         </button>
 
@@ -412,6 +368,19 @@
 
       </div>
 
+
+      <!-- 読み取り成功時に表示するオーバーレイモーダル -->
+      <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+          <div class="icon-circle">
+            <span class="checkmark">✓</span>
+          </div>
+          <h2>読み取り成功！</h2>
+          <p class="point-get">+<span id="earned-points">100</span> pt</p>
+          <p class="sub-text">ポイントを獲得しました！</p>
+          <button id="close-modal-btn" onclick="closeSuccessModal()">次へ進む</button>
+        </div>
+      </div>
     </section>
 
 
@@ -489,53 +458,6 @@
 
 
 
-    <!-- ==================================================
-         ポイント確認画面
-         ================================================== -->
-
-    <section id="points"
-      class="screen w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
-
-      <div class="card">
-
-        <h2>⭐ ポイント確認</h2>
-
-
-        <p>
-          現在のポイント
-        </p>
-
-
-        <div class="points">
-
-          <span id="totalPoints">0</span> pt
-
-        </div>
-
-
-        <hr>
-
-
-        <p>
-          二次元バーコードを読み取ると、
-          1～5ポイント獲得できます。
-        </p>
-
-
-        <button id="pointsScanButton">
-          📷 二次元バーコードを読み取る
-        </button>
-
-
-        <button id="pointsRewardButton">
-          🎁 景品と交換する
-        </button>
-
-      </div>
-
-    </section>
-
-
 
     <!-- ==================================================
          景品交換画面
@@ -567,10 +489,6 @@
               <button onclick="addPoints(10)" title="10pt追加"
                 class="bg-white/20 hover:bg-white/35 active:scale-95 text-white text-xs font-semibold px-2.5 py-2 rounded-xl transition shadow-sm">
                 +10pt
-              </button>
-              <button onclick="resetData()" title="初期化"
-                class="bg-rose-500/80 hover:bg-rose-600 active:scale-95 text-white text-xs font-semibold px-2.5 py-2 rounded-xl transition shadow-sm">
-                リセット
               </button>
             </div>
           </div>
@@ -683,11 +601,6 @@
 
     <button id="navMap">
       🗺️ 地図
-    </button>
-
-
-    <button id="navPoints">
-      ⭐ ポイント
     </button>
 
 
@@ -999,18 +912,6 @@
 
 
     document.getElementById(
-      'navPoints'
-    ).addEventListener(
-      'click',
-      function () {
-
-        showScreen('points');
-
-      }
-    );
-
-
-    document.getElementById(
       'navRewards'
     ).addEventListener(
       'click',
@@ -1075,34 +976,34 @@
     );
 
 
-
-    // ==================================================
-    // ポイント画面のボタン
-    // ==================================================
-
-    document.getElementById(
-      'pointsScanButton'
-    ).addEventListener(
-      'click',
-      function () {
-
-        showScreen('scan');
-
-      }
-    );
-
-
-    document.getElementById(
-      'pointsRewardButton'
-    ).addEventListener(
-      'click',
-      function () {
-
-        showScreen('rewards');
-
-      }
-    );
-
+    /*
+        // ==================================================
+        // ポイント画面のボタン
+        // ==================================================
+    
+        document.getElementById(
+          'pointsScanButton'
+        ).addEventListener(
+          'click',
+          function () {
+    
+            showScreen('scan');
+    
+          }
+        );
+    
+    
+        document.getElementById(
+          'pointsRewardButton'
+        ).addEventListener(
+          'click',
+          function () {
+    
+            showScreen('rewards');
+    
+          }
+        );
+    */
 
 
     // ==================================================
@@ -1380,30 +1281,30 @@
       stopCamera
     );
 
-
-    document.getElementById(
-      'backCameraBtn'
-    ).addEventListener(
-      'click',
-      function () {
-
-        changeCamera('environment');
-
-      }
-    );
-
-
-    document.getElementById(
-      'frontCameraBtn'
-    ).addEventListener(
-      'click',
-      function () {
-
-        changeCamera('user');
-
-      }
-    );
-
+    /*
+        document.getElementById(
+          'backCameraBtn'
+        ).addEventListener(
+          'click',
+          function () {
+    
+            changeCamera('environment');
+    
+          }
+        );
+    
+    
+        document.getElementById(
+          'frontCameraBtn'
+        ).addEventListener(
+          'click',
+          function () {
+    
+            changeCamera('user');
+    
+          }
+        );
+    */
 
 
     // ==================================================
@@ -1477,7 +1378,28 @@
 
     }
 
+    // QRコードの読み取りが成功したときにこの関数を呼び出す
+    function onScanSuccess(pointsEarned) {
+      // 獲得ポイントを設定
+      document.getElementById('earned-points').textContent = pointsEarned;
 
+      // バイブレーション（Android等対応端末のみ「ト・トン」と振動）
+      if ('vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
+
+      // モーダルを表示
+      const modal = document.getElementById('success-modal');
+      modal.classList.remove('hidden');
+    }
+
+    // モーダルを閉じる関数
+    function closeSuccessModal() {
+      const modal = document.getElementById('success-modal');
+      modal.classList.add('hidden');
+
+      // 必要に応じてここでカメラの再起動や画面遷移を行う
+    }
 
     // ==================================================
     // 景品交換
@@ -1493,7 +1415,7 @@
 
     // 初期状態またはLocalStorageからの復元
     let state = {
-      points: 60,
+      points: 100,
       history: [],
       exchangedPrizes: {} // 既に交換した景品IDを保持
     };
@@ -1605,25 +1527,6 @@
       render();
     }
 
-    // データ初期化
-    function resetData() {
-      if (confirm("ポイントや交換状態を初期状態に戻しますか？(テスト用)")) {
-        // 新しいストレージキーをしっかり両方削除する
-        localStorage.removeItem('points');
-        localStorage.removeItem('my_exchange_state');
-
-        // 状態を初期値に戻す（初期ポイントは60など、お好きな数値にしてください）
-        state = {
-          points: 60,
-          history: [],
-          exchangedPrizes: {}
-        };
-
-        // 画面を再描画する
-        render();
-      }
-    }
-
 
     // モーダル制御用変数
     let selectedPrizeId = null;
@@ -1663,7 +1566,6 @@
       }
     }
 
-    // 交換実行ボタンが押されたとき
     // 交換実行ボタンが押されたとき
     document.getElementById('modal-confirm-btn').addEventListener('click', () => {
       if (selectedPrizeId === null) return;
@@ -1990,7 +1892,80 @@
       }
     );
 
+    // ==================================================
+    // リセット機能
+    // ==================================================
 
+    document.getElementById(
+      'resetButton'
+    ).addEventListener(
+      'click',
+      function () {
+
+        const result =
+          confirm(
+            'ポイント、読み取り履歴、景品交換履歴をすべてリセットします。よろしいですか？'
+          );
+
+
+        if (!result) {
+
+          return;
+
+        }
+
+
+        points = 60;
+
+        scannedCodes.clear();
+
+        exchangeHistory = [];
+
+
+        localStorage.removeItem(
+          'points'
+        );
+
+
+        localStorage.removeItem(
+          'scannedCodes'
+        );
+
+        localStorage.removeItem('my_exchange_state');
+
+        // 状態を初期値に戻す（初期ポイントは60など、お好きな数値にしてください）
+        state = {
+          points: 60,
+          history: [],
+          exchangedPrizes: {}
+        };
+
+        // 画面を再描画する
+        render();
+
+
+        updatePoints();
+
+        updateHistory();
+
+
+        document.getElementById(
+          'exchangeMessage'
+        ).textContent = '';
+
+
+        document.getElementById(
+          'cameraMessage'
+        ).textContent =
+          'データをリセットしました。';
+
+
+        alert(
+          'データをリセットしました。'
+        );
+
+      }
+    );
 
     // ==================================================
     // 初期設定
@@ -2002,11 +1977,11 @@
 
 
     // 最初は外カメラ
-
-    document.getElementById(
-      'backCameraBtn'
-    ).disabled = true;
-
+    /*
+        document.getElementById(
+          'backCameraBtn'
+        ).disabled = true;
+    */
 
     // 最初はホーム
 
