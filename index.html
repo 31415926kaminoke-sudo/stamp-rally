@@ -9,6 +9,7 @@
 
   <!-- 💡 ここでCSSファイルを読み込みます -->
   <link rel="stylesheet" href="buttonStyle.css">
+  <link rel="stylesheet" href="modal-content.css">
 
   <title>富樫デジタルスタンプラリー</title>
 
@@ -370,17 +371,61 @@
 
 
       <!-- 読み取り成功時に表示するオーバーレイモーダル -->
-      <div id="success-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-          <div class="icon-circle">
-            <span class="checkmark">✓</span>
+      <div id="success-modal"
+        class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl transform scale-95 transition-transform duration-200"
+          id="success-modal-content">
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner animate-bounce">
+              ✓
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-1">読み取り成功！</h3>
+            <p class="text-sm text-gray-500 mb-6">ポイントを獲得しました！</p>
           </div>
-          <h2>読み取り成功！</h2>
-          <p class="point-get">+<span id="earned-points">100</span> pt</p>
-          <p class="sub-text">ポイントを獲得しました！</p>
-          <button id="close-modal-btn" onclick="closeSuccessModal()">次へ進む</button>
+          <div>
+            <button onclick="closeSuccessModal()"
+              class="w-full py-3 px-4 bg-green-600 hover:bg-green-700 active:scale-98 text-white font-semibold rounded-2xl transition shadow-lg shadow-green-600/30 text-sm">
+              次へ進む
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- 既に読み込み済みモーダル -->
+      <div id="already-scanned-modal"
+        class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl transform scale-95 transition-transform duration-200">
+          <div class="text-center">
+            <!-- 警告・注意を表すアイコン (黄色/オレンジ系ベース) -->
+            <div
+              class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+              ⚠️
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-1">既に読み込み済みです</h3>
+            <p class="text-sm text-gray-500 mb-6">
+              このスポットのポイントは<br>既に獲得しています！
+            </p>
+          </div>
+          <div>
+            <button onclick="closeAlreadyScannedModal()"
+              class="w-full py-3 px-4 bg-gray-800 hover:bg-gray-900 active:scale-98 text-white font-semibold rounded-2xl transition shadow-lg text-sm">
+              閉じる
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- テスト時だけ使うダミー読み取りボタン -->
+      <div style="margin: 10px; text-align: center;">
+        <button id="test-scan-btn" onclick="simulateQrScan(100)"
+          style="padding: 10px 16px; background-color: #e91e63; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+          🧪 画面テスト：読み取れたことにする
+        </button>
+      </div>
+
     </section>
 
 
@@ -1319,10 +1364,9 @@
         scannedCodes.has(decodedText)
       ) {
 
-        document.getElementById(
-          'cameraMessage'
-        ).textContent =
-          'この二次元バーコードは読み取り済みです。';
+        // モーダルを表示
+        const modal = document.getElementById('already-scanned-modal');
+        modal.classList.remove('hidden');
 
         return;
 
@@ -1332,6 +1376,15 @@
       // 読み取ったコードを保存
 
       scannedCodes.add(decodedText);
+
+      // バイブレーション（Android等対応端末のみ「ト・トン」と振動）
+      if ('vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
+
+      // モーダルを表示
+      const modal = document.getElementById('success-modal');
+      modal.classList.remove('hidden');
 
 
       // 1～5ポイントをランダムに決定
@@ -1375,30 +1428,29 @@
         '読み取り成功！ ' +
         earnedPoints +
         'ポイント獲得しました！';
-
     }
 
-    // QRコードの読み取りが成功したときにこの関数を呼び出す
-    function onScanSuccess(pointsEarned) {
-      // 獲得ポイントを設定
-      document.getElementById('earned-points').textContent = pointsEarned;
 
-      // バイブレーション（Android等対応端末のみ「ト・トン」と振動）
-      if ('vibrate' in navigator) {
-        navigator.vibrate([100, 50, 100]);
-      }
 
-      // モーダルを表示
-      const modal = document.getElementById('success-modal');
-      modal.classList.remove('hidden');
-    }
 
     // モーダルを閉じる関数
     function closeSuccessModal() {
       const modal = document.getElementById('success-modal');
       modal.classList.add('hidden');
+    }
 
-      // 必要に応じてここでカメラの再起動や画面遷移を行う
+    // 「すでに読み込み済み」モーダルを閉じる関数
+    function closeAlreadyScannedModal() {
+      const modal = document.getElementById('already-scanned-modal');
+      modal.classList.add('hidden');
+    }
+
+    // テスト用：QRコードを読み取ったフリをして演出を呼び出す
+    function simulateQrScan(points) {
+      console.log("［テスト実行］QRコード読み取り成功をシミュレートします");
+
+      // 実際に読み取りが成功したときと同じ関数を呼ぶ
+      onScanSuccess(points);
     }
 
     // ==================================================
@@ -1415,7 +1467,7 @@
 
     // 初期状態またはLocalStorageからの復元
     let state = {
-      points: 100,
+      points: 60,
       history: [],
       exchangedPrizes: {} // 既に交換した景品IDを保持
     };
