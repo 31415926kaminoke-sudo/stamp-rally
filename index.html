@@ -83,27 +83,18 @@
       display: block;
     }
 
-
 /* =========================
-       カード（デフォルト：PC向け）
-       ========================= */
-    .card {
-      max-width: 600px;
-      margin: 15px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-    }
-
-    /* ▼ スマホ（画面幅767px以下）のときだけ、カードの余白や角丸を消して画面にフィットさせる */
-    @media screen and (max-width: 767px) {
-      .card {
-        margin: 0 auto 20px auto !important; /* 左右の余白をゼロにして画面いっぱいに */
-        border-radius: 0 !important;         /* 角丸をなくしてスマホっぽくする */
-        box-shadow: none !important;         /* 影も消してフラットに */
-        /* もし必要なら padding も 15px などに少し狭くできます */
-      }
-    }
+     .card を「箱」ではなく「余白」にする
+     ========================= */
+  .card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 20px 16px; /* 上下20px、左右16pxの自然な余白 */
+    background: transparent; /* 背景の白を消して画面全体と馴染ませる */
+    border-radius: 0; /* 角丸を消す */
+    box-shadow: none; /* 影を消す */
+  }
 
 
     /* =========================
@@ -265,9 +256,7 @@
     <!-- ==================================================
          ホーム画面
          ================================================== -->
-
-    <section id="home"
-      class="screen active w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
+<section id="home" class="screen active w-full md:max-w-md md:mx-auto md:min-h-screen md:bg-gray-50 md:shadow-xl relative md:overflow-hidden">
 
       <div class="card">
 
@@ -321,8 +310,7 @@
          二次元バーコード読み取り画面
          ================================================== -->
 
-    <section id="scan"
-      class="screen w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
+<section id="scan" class="screen active w-full md:max-w-md md:mx-auto md:min-h-screen md:bg-gray-50 md:shadow-xl relative md:overflow-hidden">
 
       <div class="card">
 
@@ -431,8 +419,7 @@
          地図画面
          ================================================== -->
 
-    <section id="mapScreen"
-      class="screen w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
+<section id="mapScreen" class="screen active w-full md:max-w-md md:mx-auto md:min-h-screen md:bg-gray-50 md:shadow-xl relative md:overflow-hidden">
 
       <div class="card">
 
@@ -505,8 +492,7 @@
          景品交換画面
          ================================================== -->
 
-    <section id="rewards"
-      class="screen w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
+<section id="rewards" class="screen active w-full md:max-w-md md:mx-auto md:min-h-screen md:bg-gray-50 md:shadow-xl relative md:overflow-hidden">
 
       <!-- スマホ想定の縦長コンテナ -->
       <div>
