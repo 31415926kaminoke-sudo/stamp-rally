@@ -1357,7 +1357,13 @@
     // 二次元バーコード読み取り
     // ==================================================
 
+    // 処理中かどうかを覚えておくスイッチ（最初は「処理してない(false)」）
+    let isProcessing = false;
+
     function onScanSuccess(decodedText) {
+      if (isProcessing) return;
+
+      isProcessing = true;
 
       // 同じコードを2回読み取らない
 
@@ -1438,12 +1444,14 @@
     function closeSuccessModal() {
       const modal = document.getElementById('success-modal');
       modal.classList.add('hidden');
+      isProcessing = false;
     }
 
     // 「すでに読み込み済み」モーダルを閉じる関数
     function closeAlreadyScannedModal() {
       const modal = document.getElementById('already-scanned-modal');
       modal.classList.add('hidden');
+      isProcessing = false;
     }
 
     // テスト用：QRコードを読み取ったフリをして演出を呼び出す
@@ -1802,11 +1810,19 @@
       // スポットをマーカー表示
       // ==================================================
 
+      // スポット用の赤いピンアイコン（見分けがつきやすい色）
+      const spotPinIcon = L.divIcon({
+        className: 'spot-location-marker',
+        html: '<div style="background-color: #ff4757; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: bold;">★</div>',
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+      });
+
       spotsData.forEach(
         function (spot) {
 
           L.marker(
-            [spot.lat, spot.lng]
+            [spot.lat, spot.lng],{ icon: spotPinIcon } // ← ここにアイコンを指定！
           )
             .addTo(map)
             .bindPopup(
@@ -1832,13 +1848,19 @@
     // 現在地取得
     // ==================================================
 
-    function getUserLocation() {
+    // 現在地用の青い丸アイコンを定義
+    const currentPositionIcon = L.divIcon({
+      className: 'current-location-marker',
+      html: '<div style="background-color: #007bff; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.5);"></div>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
 
+    function getUserLocation() {
       const message =
         document.getElementById(
           'locationMessage'
         );
-
 
       if (
         !navigator.geolocation
@@ -1883,7 +1905,8 @@
 
             userMarker =
               L.marker(
-                [lat, lng]
+                [lat, lng],
+                { icon: currentPositionIcon } // ← ここにアイコンを指定！
               )
                 .addTo(map)
                 .bindPopup(
