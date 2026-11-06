@@ -233,27 +233,18 @@
     }
 
 
-    /* ==================================================
-   スマホ実機向け：画面幅が狭い時はすべて横幅いっぱいに広げる
-   ================================================== */
-    @media screen and (max-width: 767px) {
+    /* 画面が大きい（パソコンなど）ときだけ、スマホ風の箱（フレーム）にする */
+    @media screen and (min-width: 768px) {
 
-      /* 外枠になりそうな要素の幅制限をまとめて解除 */
-      div,
-      main,
-      section,
-      container,
-      #app,
-      .app,
-      .container,
-      .frame,
-      .wrapper {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
+      #home,
+      .screen {
+        max-width: 400px !important;
+        margin: 0 auto !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+        border-radius: 20px !important;
+        background-color: #f9fafb !important;
+        overflow-y: auto !important;
+        max-height: 90vh !important;
       }
     }
   </style>
@@ -282,8 +273,7 @@
          ホーム画面
          ================================================== -->
 
-    <section id="home"
-      class="screen active w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
+    <section id="home" class="screen w-full min-h-screen relative overflow-hidden active">
 
       <div class="card">
 
