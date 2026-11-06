@@ -84,16 +84,25 @@
     }
 
 
-    /* =========================
-       カード
+/* =========================
+       カード（デフォルト：PC向け）
        ========================= */
-
     .card {
       max-width: 600px;
       margin: 15px auto;
       padding: 20px;
       background: white;
       border-radius: 12px;
+    }
+
+    /* ▼ スマホ（画面幅767px以下）のときだけ、カードの余白や角丸を消して画面にフィットさせる */
+    @media screen and (max-width: 767px) {
+      .card {
+        margin: 0 auto 20px auto !important; /* 左右の余白をゼロにして画面いっぱいに */
+        border-radius: 0 !important;         /* 角丸をなくしてスマホっぽくする */
+        box-shadow: none !important;         /* 影も消してフラットに */
+        /* もし必要なら padding も 15px などに少し狭くできます */
+      }
     }
 
 
@@ -231,22 +240,6 @@
     .spot-list p {
       margin: 8px 0;
     }
-
-
-    /* 画面が大きい（パソコンなど）ときだけ、スマホ風の箱（フレーム）にする */
-    @media screen and (min-width: 768px) {
-
-      #home,
-      .screen {
-        max-width: 400px !important;
-        margin: 0 auto !important;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
-        border-radius: 20px !important;
-        background-color: #f9fafb !important;
-        overflow-y: auto !important;
-        max-height: 90vh !important;
-      }
-    }
   </style>
 
 </head>
@@ -273,7 +266,8 @@
          ホーム画面
          ================================================== -->
 
-    <section id="home" class="screen w-full min-h-screen relative overflow-hidden active">
+    <section id="home"
+      class="screen active w-full max-w-md mx-auto min-h-screen bg-gray-50 shadow-xl relative overflow-hidden">
 
       <div class="card">
 
@@ -1826,7 +1820,7 @@
         function (spot) {
 
           L.marker(
-            [spot.lat, spot.lng], { icon: spotPinIcon } // ← ここにアイコンを指定！
+            [spot.lat, spot.lng],{ icon: spotPinIcon } // ← ここにアイコンを指定！
           )
             .addTo(map)
             .bindPopup(
